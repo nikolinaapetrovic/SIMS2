@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,10 +16,17 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
+import szn.model.IzvestajTableModel;
+import szn.model.KonekcijskaKlasa;
+import szn.model.Korisnik;
 import szn.view.Login;
 
 @SuppressWarnings("serial")
@@ -32,8 +40,16 @@ public class SefStanice extends JFrame{
 	private JPanel panel;
 	private JButton btnPrikazi;
 	private JPanel pnlPrikaz;
-	public SefStanice(){
+	private JPanel contentPane;
+	private BorderLayout borderLayout1 = new BorderLayout();
+	private JScrollPane jScrollPane1 = new JScrollPane();
+
+	private JTable tableIzvestaj;
+	private IzvestajTableModel izvestajModel;
+	Korisnik k;
+	public SefStanice(Korisnik kor){
 		try {
+			this.k = kor;
 			jbInit();
 		}
 		catch (Exception e) {
@@ -74,14 +90,51 @@ public class SefStanice extends JFrame{
         panel.add(pnlTip);
         
 		btnPrikazi =  new JButton("Prikazi");
+		btnPrikazi.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				KonekcijskaKlasa kk;
+				try {
+					kk = new KonekcijskaKlasa();
+					izvestajModel = new IzvestajTableModel(kk.vratiIzvestajCena(k, txtPocetni.getText(), txtKrajnji.getText()));				
+					tableIzvestaj.setModel(izvestajModel);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		panel.add(btnPrikazi);
 		
+		JPanel pnn = new JPanel(new GridLayout(1, 1));
+		KonekcijskaKlasa kk;
+		try {
+			kk = new KonekcijskaKlasa();
+			izvestajModel = new IzvestajTableModel(kk.vratiIzvestajCena(k));
+			tableIzvestaj = new JTable(izvestajModel);
+			tableIzvestaj.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			tableIzvestaj.setBorder(new EmptyBorder(8,8,20,8));
+			
+			jScrollPane1.getViewport().add(tableIzvestaj, null);
+			pnn.add(jScrollPane1);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	
 		
 		setSize(700, 500);
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
-		this.add(panel,BorderLayout.CENTER);
+
+		this.add(pnn,BorderLayout.EAST);
+		this.add(panel,BorderLayout.WEST);
 	}
 	
 	private void kreirajMenu(){
@@ -95,7 +148,8 @@ public class SefStanice extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				IzmenaCene ic = new IzmenaCene(k);
+				ic.setVisible(true);
 			}
 		});
 		
@@ -107,7 +161,8 @@ public class SefStanice extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				KvarView kv = new KvarView(k);
+				kv.setVisible(true);
 				
 			}
 		});
@@ -122,8 +177,8 @@ public class SefStanice extends JFrame{
 				setVisible(false);
 			}
 		});
-        menu.add(miOdjava);
         menu.add(miKvarovi);
+        menu.add(miOdjava);
         menuBar.add(menu);
         setJMenuBar(menuBar);
 	}

@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import szn.model.Korisnik;
+import szn.model.TipKorisnika;
+
 import java.sql.*; 
 
 
@@ -57,7 +60,7 @@ public class Login extends JFrame implements ActionListener {
 		 String user = txtUsername.getText();
 		 String pass = txtPassword.getText();
 		 
-		 String connectionUrl = "jdbc:sqlserver://NIKOLINAP;databaseName=SIMS;integratedSecurity=true;";
+		  String connectionUrl = "jdbc:sqlserver://NIKOLINAP;databaseName=SIMS;integratedSecurity=true;";
 	 
 	      Connection con = null;  
 	      Statement stmt = null;  
@@ -78,10 +81,13 @@ public class Login extends JFrame implements ActionListener {
 	            		
 	            	}else if(rs.getString(3).equals("2"))//sef stanice
 	            	{
-	            		SefStanice sef = new SefStanice();
+	    
+	            		Korisnik k = new Korisnik(rs.getString(1), rs.getString(2), TipKorisnika.SEF);
+	            		SefStanice sef = new SefStanice(k);
 	            		sef.setVisible(true);
 	            	}else if(rs.getString(3).equals("3")){ //kontrolor
-	            		DodavanjeNaplate dn = new DodavanjeNaplate();
+	            		Korisnik k = new Korisnik(rs.getString(1), rs.getString(2), TipKorisnika.KONTROLOR);
+	            		DodavanjeNaplate dn = new DodavanjeNaplate(k);
 	            		dn.setVisible(true);
 	            	}
 	            	

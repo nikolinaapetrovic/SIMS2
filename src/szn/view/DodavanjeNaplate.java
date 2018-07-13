@@ -8,21 +8,27 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import szn.model.IzvestajTableModel;
+import szn.model.Korisnik;
+
 public class DodavanjeNaplate extends JFrame {
 	
-	private JTextField txtKategorija;
+	Korisnik k;
 	private JComboBox<String> cbKategorija;
 	private JComboBox<String> cbMesto;
 	private JComboBox<String> cbValuta;
 	private JPanel panel;
 	
+	
 	private JLabel lblIspis;
 	
-	public DodavanjeNaplate(){
+	public DodavanjeNaplate(Korisnik kor){
 		try {
+			this.k = kor;
 			jbInit();
 		}
 		catch (Exception e) {
@@ -32,7 +38,6 @@ public class DodavanjeNaplate extends JFrame {
 	
 	public void jbInit(){
 		
-		txtKategorija = new JTextField();
 		String[] kategorije = {"I KATEGORIJA", "I-A KATEGORIJA", "II KATEGORIJA", "III KATEGORIJA", "IV KATEGORIJA"};
 		
 		cbKategorija = new JComboBox<String>(kategorije);

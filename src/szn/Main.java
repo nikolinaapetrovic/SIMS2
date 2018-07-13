@@ -10,5 +10,4 @@ public class Main {
 		Login frame = new Login();
 		frame.setVisible(true);
 	}
-
 }
