@@ -19,6 +19,27 @@ public class KonekcijskaKlasa {
         stmt = con.createStatement();  
     }
     
+    public ArrayList<String> vratiMestaDolaska(Korisnik k){
+    	ArrayList<String> mesta = new ArrayList<String>();
+    	ResultSet rs = null;  
+    	String SQL = "SELECT m.naziv FROM tblKorisnici k JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme JOIN tblDeonice d ON d.idStanice = ks.idStanice JOIN tblMesta m ON d.mestoDolaska = m.idMesta WHERE k.korisnickoIme = '" + k.getUsername() + "';";
+    	System.out.println(SQL);
+    	try {
+			stmt = con.createStatement();
+			
+			rs = stmt.executeQuery(SQL);
+			while (rs.next()) { 
+				System.out.println(rs.getString(1));
+				mesta.add(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+    	
+    	return mesta;
+    }
+    
+    
     public ArrayList<KvarModel> vratiKvarove(Korisnik k, String pocetna, String krajnja){
     	ArrayList<KvarModel> kvarovi = new ArrayList<KvarModel>();
     	ResultSet rs = null;  

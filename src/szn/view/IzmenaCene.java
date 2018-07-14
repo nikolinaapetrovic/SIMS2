@@ -2,6 +2,8 @@ package szn.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -11,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import szn.model.KonekcijskaKlasa;
 import szn.model.Korisnik;
 
 public class IzmenaCene  extends JFrame{
@@ -36,9 +39,20 @@ public class IzmenaCene  extends JFrame{
 	public void jbInit(){
 		String[] kategorije = {"I KATEGORIJA", "I-A KATEGORIJA", "II KATEGORIJA", "III KATEGORIJA", "IV KATEGORIJA"};
 		cbKategorija = new JComboBox<String>(kategorije);
-		
-		String[] mesto = {"Beograd - Indjija", "Beograd - Novi Sad", "Beograd - Nis"};
-		cbDeonica = new JComboBox<String>(mesto);
+		cbDeonica = new JComboBox<String>();
+		try {
+			KonekcijskaKlasa kk = new KonekcijskaKlasa();
+			ArrayList<String> mesta = kk.vratiMestaDolaska(k);
+			
+			for(String m : mesta){
+				cbDeonica.addItem(m);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		txtCena = new JTextField();
 		btnPotvrdi = new JButton("Potvrdi");
@@ -49,7 +63,7 @@ public class IzmenaCene  extends JFrame{
 		
 		panel = new JPanel(new GridLayout(10,2,10,10));
 		
-		panel.add(new JLabel("Deonica: "));
+		panel.add(new JLabel("Mesto dolaska: "));
 		panel.add(cbDeonica);
 		
 		panel.add(new JLabel("Kategorija vozila: "));
