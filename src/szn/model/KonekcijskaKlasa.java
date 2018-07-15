@@ -19,6 +19,64 @@ public class KonekcijskaKlasa {
         stmt = con.createStatement();  
     }
     
+    public ArrayList<String> vratiSveNaplatneStanice(){
+    	ArrayList<String> mesta = new ArrayList<String>();
+    	ResultSet rs = null;  
+    	String SQL = "SELECT * FROM tblNaplatnaStanica;";
+    	System.out.println(SQL);
+    	try {
+			stmt = con.createStatement();
+			
+			rs = stmt.executeQuery(SQL);
+			while (rs.next()) { 
+				System.out.println(rs.getString(1));
+				mesta.add(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+    	
+    	return mesta;
+    }
+    
+    public ArrayList<String> vratiSveDeonice(){
+    	ArrayList<String> mesta = new ArrayList<String>();
+    	ResultSet rs = null;  
+    	String SQL = "SELECT * FROM tblDeonice;";
+    	System.out.println(SQL);
+    	try {
+			stmt = con.createStatement();
+			
+			rs = stmt.executeQuery(SQL);
+			while (rs.next()) { 
+				mesta.add(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+    	
+    	return mesta;
+    }
+    
+    public ArrayList<String> vratiSvaMesta(){
+    	ArrayList<String> mesta = new ArrayList<String>();
+    	ResultSet rs = null;  
+    	String SQL = "SELECT * FROM tblMesta;";
+    	System.out.println(SQL);
+    	try {
+			stmt = con.createStatement();
+			
+			rs = stmt.executeQuery(SQL);
+			while (rs.next()) { 
+				mesta.add(rs.getString(2));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+    	
+    	return mesta;
+    }
+    
     public ArrayList<String> vratiMestaDolaska(Korisnik k){
     	ArrayList<String> mesta = new ArrayList<String>();
     	ResultSet rs = null;  
@@ -125,4 +183,5 @@ public class KonekcijskaKlasa {
     	return cene;
     	
     }
+
 }

@@ -3,6 +3,7 @@ package szn.view;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -59,6 +60,25 @@ public class AdminView extends JFrame {
 		cbMesto = new JComboBox<String>();
 		btnPotvrdi = new JButton("Potvrdi");
 		
+		try {
+			KonekcijskaKlasa kk = new KonekcijskaKlasa();
+			
+			ArrayList<String> mesta = kk.vratiSvaMesta();
+			for(String m : mesta){
+				cbPolazak.addItem(m);
+				cbDolazak.addItem(m);
+			}
+			
+			ArrayList<String> stanice =  kk.vratiSveNaplatneStanice();
+			for(String m : stanice){
+				cbMesto.addItem(m);
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
 		panel = new JPanel(new GridLayout(10,2,10,10));
 		
 		panel.add(new JLabel("Id deonice: "));
@@ -87,6 +107,29 @@ public class AdminView extends JFrame {
 		cbMestoIzmena = new JComboBox<String>();
 		btnPotvrdiIzmena = new JButton("Izmeni");
 		
+		try {
+			KonekcijskaKlasa kk = new KonekcijskaKlasa();
+			
+			ArrayList<String> deonice = kk.vratiSveDeonice();
+			for(String m : deonice){
+				cbDeonice.addItem(m);
+			}
+			
+			ArrayList<String> mesta = kk.vratiSvaMesta();
+			for(String m : mesta){
+				cbPolazakIzmena.addItem(m);
+				cbDolazakIzmena.addItem(m);
+			}
+			
+			ArrayList<String> stanice =  kk.vratiSveNaplatneStanice();
+			for(String m : stanice){
+				cbMestoIzmena.addItem(m);
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		
 		panel1.add(new JLabel("ID Deonice"));
 		panel1.add(cbDeonice);
 		
@@ -107,6 +150,18 @@ public class AdminView extends JFrame {
 		JPanel panel2 = new JPanel();
 		cbDeoniceBrisanje = new JComboBox<String>();
 		btnPotvrdiBrisanje = new JButton("Izbrisi deonicu");
+		
+		try {
+			KonekcijskaKlasa kk = new KonekcijskaKlasa();
+			
+			ArrayList<String> deonice = kk.vratiSveDeonice();
+			for(String m : deonice){
+				cbDeoniceBrisanje.addItem(m);
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
 		
 		panel2.add(new JLabel("ID Deonice"));
 		panel2.add(cbDeoniceBrisanje);
