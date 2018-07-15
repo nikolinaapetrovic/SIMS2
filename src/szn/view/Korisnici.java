@@ -2,6 +2,8 @@ package szn.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,6 +14,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import szn.model.KonekcijskaKlasa;
 import szn.model.Korisnik;
 
 public class Korisnici extends JFrame {
@@ -75,6 +78,18 @@ public class Korisnici extends JFrame {
 		JPanel panel1 = new JPanel(new GridLayout(10,2,10,10));
 		cbKorisnicko = new JComboBox<String>();
 		
+		try {
+			KonekcijskaKlasa kk = new KonekcijskaKlasa();
+			
+			ArrayList<String> korisnici = kk.vratiSveKorisnike();
+			for(String m : korisnici){
+				cbKorisnicko.addItem(m);
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		
 		txtKorisnickoIzmena = new JTextField();
 		txtSifraIzmena =  new JTextField();
 		
@@ -105,9 +120,21 @@ public class Korisnici extends JFrame {
 		JPanel panel2 = new JPanel(new GridLayout(10,2,10,10));
 		
 		cbKorisnickoBrisanje = new JComboBox<String>();
+		
+		try {
+			KonekcijskaKlasa kk = new KonekcijskaKlasa();
+			
+			ArrayList<String> korisnici = kk.vratiSveKorisnike();
+			for(String m : korisnici){
+				cbKorisnickoBrisanje.addItem(m);
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
 		btnPotvrdiBrisanje = new JButton("Izbrisi");
 		
-		panel2.add(new JLabel("ID Naplatne stanice: "));
+		panel2.add(new JLabel("Korisnicko ime: "));
 		panel2.add(cbKorisnickoBrisanje);
 		
 		panel2.add(btnPotvrdiBrisanje);

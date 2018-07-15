@@ -2,6 +2,8 @@ package szn.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,6 +14,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import szn.model.KonekcijskaKlasa;
 import szn.model.Korisnik;
 
 public class NaplatneStaniceView extends JFrame{
@@ -68,6 +71,18 @@ public class NaplatneStaniceView extends JFrame{
 		txtNazivIzmena = new JTextField();
 		btnPotvrdiIzmenu = new JButton("Izmeni");
 		
+		try {
+			KonekcijskaKlasa kk = new KonekcijskaKlasa();
+
+			ArrayList<String> stanice =  kk.vratiSveNaplatneStanice();
+			for(String m : stanice){
+				cbIdIzmena.addItem(m);
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		
 		panel1.add(new JLabel("ID Naplatne stanice: "));
 		panel1.add(cbIdIzmena);
 		
@@ -85,6 +100,18 @@ public class NaplatneStaniceView extends JFrame{
 		
 		cbIdBrisanje = new JComboBox<String>();
 		btnPotvrdiBrisanje = new JButton("Izbrisi");
+		
+		try {
+			KonekcijskaKlasa kk = new KonekcijskaKlasa();
+
+			ArrayList<String> stanice =  kk.vratiSveNaplatneStanice();
+			for(String m : stanice){
+				cbIdBrisanje.addItem(m);
+			}
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
 		
 		panel2.add(new JLabel("ID Naplatne stanice: "));
 		panel2.add(cbIdBrisanje);
