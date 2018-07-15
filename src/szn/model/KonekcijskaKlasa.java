@@ -59,6 +59,46 @@ public class KonekcijskaKlasa {
     	return mesta;
     }
     
+    public String vratiIdNaplatneStanice(String id){
+    	ArrayList<String> mesta = new ArrayList<String>();
+    	ResultSet rs = null;  
+    	String SQL = "SELECT * FROM tblNaplatnaStanica WHERE naziv = '" + id + "';";
+    	System.out.println(SQL);
+    	try {
+			stmt = con.createStatement();
+			
+			rs = stmt.executeQuery(SQL);
+			while (rs.next()) { 
+				System.out.println(rs.getString(1));
+				mesta.add(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+    	
+    	return mesta.get(0);
+    }
+    
+    public ArrayList<String> vratiSveNaplatneStaniceIme(){
+    	ArrayList<String> mesta = new ArrayList<String>();
+    	ResultSet rs = null;  
+    	String SQL = "SELECT * FROM tblNaplatnaStanica;";
+    	System.out.println(SQL);
+    	try {
+			stmt = con.createStatement();
+			
+			rs = stmt.executeQuery(SQL);
+			while (rs.next()) { 
+				System.out.println(rs.getString(2));
+				mesta.add(rs.getString(2));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+    	
+    	return mesta;
+    }
+    
     public ArrayList<String> vratiSveDeonice(){
     	ArrayList<String> mesta = new ArrayList<String>();
     	ResultSet rs = null;  
@@ -156,6 +196,29 @@ public class KonekcijskaKlasa {
 		}  
     	
     	return kvarovi;
+    }
+    
+    public ArrayList<IzvestajModel> vratiIzvestajCena(Korisnik k, String id){
+    	ArrayList<IzvestajModel> cene = new ArrayList<IzvestajModel>();
+    	ResultSet rs = null;  
+    	
+    	String SQL = "SELECT ns.naziv, nm.idMesta, SUM(n.Cena) FROM tblNaplatnaStanica ns JOIN tblNaplatnoMesto nm ON nm.idStanice = ns.idStanice JOIN Naplata n ON n.idMesta = nm.idMesta WHERE ns.idStanice = " + id +" GROUP BY nm.idMesta, ns.naziv;";
+
+    	System.out.println(SQL);
+    	try {
+			stmt = con.createStatement();
+			
+			rs = stmt.executeQuery(SQL);
+			while (rs.next()) { 
+				IzvestajModel im = new IzvestajModel(rs.getString(1), Integer.valueOf(rs.getString(2)), Double.parseDouble(rs.getString(3)));
+				cene.add(im);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+    	
+    	return cene;
+    	
     }
     
     public ArrayList<IzvestajModel> vratiIzvestajCena(Korisnik k){

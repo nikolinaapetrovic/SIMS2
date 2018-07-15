@@ -90,6 +90,9 @@ public class Login extends JFrame implements ActionListener {
 	            	}else if(rs.getString(3).equals("3")){ //kontrolor
 	            		DodavanjeNaplate dn = new DodavanjeNaplate(k);
 	            		dn.setVisible(true);
+	            	}else if(rs.getString(3).equals("4")){ //radnik u centrali
+	            		CentralaView dn = new CentralaView(k);
+	            		dn.setVisible(true);
 	            	}
 	            	
 	            	this.setVisible(false);
