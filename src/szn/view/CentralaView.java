@@ -104,7 +104,6 @@ public class CentralaView  extends JFrame{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 		});
 		
