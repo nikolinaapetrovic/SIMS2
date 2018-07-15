@@ -2,11 +2,17 @@ package szn.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -37,7 +43,7 @@ public class DodavanjeNaplate extends JFrame {
 	}
 	
 	public void jbInit(){
-		
+		kreirajMenu();
 		String[] kategorije = {"I KATEGORIJA", "I-A KATEGORIJA", "II KATEGORIJA", "III KATEGORIJA", "IV KATEGORIJA"};
 		
 		cbKategorija = new JComboBox<String>(kategorije);
@@ -74,6 +80,26 @@ public class DodavanjeNaplate extends JFrame {
 
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 		this.add(panel,BorderLayout.CENTER);
+	}
+	
+	private void kreirajMenu(){
+		JMenuBar menuBar = new JMenuBar();
+
+		JMenu menu = new JMenu("Meni");
+        JMenuItem miOdjava = new JMenuItem("Odjavi se");
+        miOdjava.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Login login = new Login();
+				login.setVisible(true);
+				setVisible(false);
+			}
+		});
+        menu.add(miOdjava);
+        
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
 	}
 
 }

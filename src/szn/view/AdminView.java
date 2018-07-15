@@ -2,6 +2,9 @@ package szn.view;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -10,6 +13,9 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -21,6 +27,8 @@ import szn.model.Korisnik;
 public class AdminView extends JFrame {
 	
 	Korisnik k;
+	private JMenu menu;
+	private JMenuBar menuBar;
 	private JTextField txtId;
 	private JComboBox<String> cbDeonice;
 	private JComboBox<String> cbDolazak;
@@ -50,6 +58,8 @@ public class AdminView extends JFrame {
 	
 	public void jbInit(){
 		setTitle("Admin panel");
+		
+		kreirajMenu();
 		
 		//DODAVANJE DEONICE
 		JTabbedPane tabbedPane = new JTabbedPane();
@@ -143,7 +153,7 @@ public class AdminView extends JFrame {
 		panel1.add(cbMestoIzmena);
 		
 		panel1.add(btnPotvrdiIzmena);
-		
+		panel1.setBorder(new EmptyBorder(20, 20, 20, 20));
 		tabbedPane.addTab("Izmena deonice", panel1);
 
 		//BRISANJE DEONICE
@@ -172,5 +182,54 @@ public class AdminView extends JFrame {
 		
 		this.setSize(450, 400);
 	}
+	
+	private void kreirajMenu(){
+		menuBar = new JMenuBar();
 
+        menu = new JMenu("Meni");
+        
+        JMenuItem miNaplatne = new JMenuItem("NaplatneStanice");
+        miNaplatne.setMnemonic(KeyEvent.VK_N);
+        
+        miNaplatne.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				NaplatneStaniceView nsv = new NaplatneStaniceView(k);
+				nsv.setVisible(true);
+				
+			}
+		});
+        
+        menu.add(miNaplatne);
+
+        JMenuItem miKorisnici = new JMenuItem("Korisnici");
+        miKorisnici.setMnemonic(KeyEvent.VK_K);
+        
+        miKorisnici.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Korisnici ko = new Korisnici(k);
+				ko.setVisible(true);
+			}
+		});
+
+        menu.add(miKorisnici);
+        
+        JMenuItem miOdjava = new JMenuItem("Odjavi se");
+        miOdjava.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Login login = new Login();
+				login.setVisible(true);
+				setVisible(false);
+			}
+		});
+        menu.add(miOdjava);
+        
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
+	}
 }
