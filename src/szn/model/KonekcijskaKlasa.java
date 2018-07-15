@@ -140,7 +140,33 @@ public class KonekcijskaKlasa {
     public ArrayList<String> vratiMestaDolaska(Korisnik k){
     	ArrayList<String> mesta = new ArrayList<String>();
     	ResultSet rs = null;  
-    	String SQL = "SELECT m.naziv FROM tblKorisnici k JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme JOIN tblDeonice d ON d.idStanice = ks.idStanice JOIN tblMesta m ON d.mestoDolaska = m.idMesta WHERE k.korisnickoIme = '" + k.getUsername() + "';";
+    	String SQL = "SELECT m.naziv FROM tblKorisnici k "+
+    	"JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme "+
+    	"JOIN tblDeonice d ON d.idStanice = ks.idStanice JOIN tblMesta m "+
+    	"ON d.mestoDolaska = m.idMesta WHERE k.korisnickoIme = '" + k.getUsername() + "';";
+    	System.out.println(SQL);
+    	try {
+			stmt = con.createStatement();
+			
+			rs = stmt.executeQuery(SQL);
+			while (rs.next()) { 
+				System.out.println(rs.getString(1));
+				mesta.add(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}  
+    	
+    	return mesta;
+    }
+    
+    public ArrayList<String> vratiMestaDolaskaKontrolor(Korisnik k){
+    	ArrayList<String> mesta = new ArrayList<String>();
+    	ResultSet rs = null;  
+    	String SQL = "SELECT naziv FROM tblKorisnici k JOIN KorisnikMesto km ON " + 
+    	"k.korisnickoIme = km.korisnickoIme JOIN tblNaplatnoMesto nm ON nm.idMesta = km.idMesta "+
+    	"JOIN tblDeonice d ON d.idStanice = nm.idStanice JOIN tblMesta m ON d.mestoDolaska = m.idMesta "+
+    	"WHERE k.korisnickoIme = '" + k.getUsername() + "';";
     	System.out.println(SQL);
     	try {
 			stmt = con.createStatement();
@@ -161,7 +187,11 @@ public class KonekcijskaKlasa {
     public ArrayList<KvarModel> vratiKvarove(Korisnik k, String pocetna, String krajnja){
     	ArrayList<KvarModel> kvarovi = new ArrayList<KvarModel>();
     	ResultSet rs = null;  
-    	String SQL = "SELECT kv.idKvara, kv.vremeKvara, kv.vrstaKvara, kv.idUredjaja FROM tblKorisnici k JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme JOIN tblKvar kv ON kv.idStanice = ks.idStanice WHERE k.korisnickoIme = '" + k.getUsername() + "' AND kv.vremeKvara BETWEEN '" + pocetna +"' AND '" + krajnja +"';";
+    	String SQL = "SELECT kv.idKvara, kv.vremeKvara, kv.vrstaKvara, kv.idUredjaja"+
+    	" FROM tblKorisnici k JOIN KorisnikStanica ks ON "+
+    	"k.korisnickoIme = ks.korisnickoIme JOIN tblKvar kv ON "+
+    	"kv.idStanice = ks.idStanice WHERE k.korisnickoIme = '" + k.getUsername() +
+    	"' AND kv.vremeKvara BETWEEN '" + pocetna +"' AND '" + krajnja +"';";
     
     	try {
 			stmt = con.createStatement();
@@ -181,7 +211,9 @@ public class KonekcijskaKlasa {
     public ArrayList<KvarModel> vratiKvarove(Korisnik k){
     	ArrayList<KvarModel> kvarovi = new ArrayList<KvarModel>();
     	ResultSet rs = null;  
-    	String SQL = "SELECT kv.idKvara, kv.vremeKvara, kv.vrstaKvara, kv.idUredjaja FROM tblKorisnici k JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme JOIN tblKvar kv ON kv.idStanice = ks.idStanice WHERE k.korisnickoIme = '" + k.getUsername() + "';";
+    	String SQL = "SELECT kv.idKvara, kv.vremeKvara, kv.vrstaKvara, kv.idUredjaja"+
+    	" FROM tblKorisnici k JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme JOIN tblKvar kv ON "+
+    			"kv.idStanice = ks.idStanice WHERE k.korisnickoIme = '" + k.getUsername() + "';";
     
     	try {
 			stmt = con.createStatement();
@@ -202,7 +234,9 @@ public class KonekcijskaKlasa {
     	ArrayList<IzvestajModel> cene = new ArrayList<IzvestajModel>();
     	ResultSet rs = null;  
     	
-    	String SQL = "SELECT ns.naziv, nm.idMesta, SUM(n.Cena) FROM tblNaplatnaStanica ns JOIN tblNaplatnoMesto nm ON nm.idStanice = ns.idStanice JOIN Naplata n ON n.idMesta = nm.idMesta WHERE ns.idStanice = " + id +" GROUP BY nm.idMesta, ns.naziv;";
+    	String SQL = "SELECT ns.naziv, nm.idMesta, SUM(n.Cena) FROM tblNaplatnaStanica ns "+
+    	"JOIN tblNaplatnoMesto nm ON nm.idStanice = ns.idStanice JOIN Naplata n ON "+
+    			"n.idMesta = nm.idMesta WHERE ns.idStanice = " + id +" GROUP BY nm.idMesta, ns.naziv;";
 
     	System.out.println(SQL);
     	try {
@@ -225,7 +259,11 @@ public class KonekcijskaKlasa {
     	ArrayList<IzvestajModel> cene = new ArrayList<IzvestajModel>();
     	ResultSet rs = null;  
     	
-    	String SQL = "SELECT ns.naziv, nm.idMesta, SUM(n.Cena) FROM tblKorisnici k JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme JOIN tblNaplatnaStanica ns ON ks.idStanice = ns.idStanice JOIN tblNaplatnoMesto nm ON nm.idStanice = ns.idStanice JOIN Naplata n ON n.idMesta = nm.idMesta WHERE k.korisnickoIme = '" + k.getUsername() + "' GROUP BY nm.idMesta, ns.naziv;";  
+    	String SQL = "SELECT ns.naziv, nm.idMesta, SUM(n.Cena) FROM tblKorisnici k "+
+    	"JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme "+
+    	"JOIN tblNaplatnaStanica ns ON ks.idStanice = ns.idStanice JOIN tblNaplatnoMesto nm "+
+    	"ON nm.idStanice = ns.idStanice JOIN Naplata n ON n.idMesta = nm.idMesta WHERE k.korisnickoIme = '" 
+    	+ k.getUsername() + "' GROUP BY nm.idMesta, ns.naziv;";  
 
     	System.out.println(SQL);
     	try {
@@ -248,7 +286,11 @@ public class KonekcijskaKlasa {
     	ArrayList<IzvestajModel> cene = new ArrayList<IzvestajModel>();
     	ResultSet rs = null;  
     	
-    	String SQL = "SELECT ns.naziv, nm.idMesta, SUM(n.Cena) FROM tblKorisnici k JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme JOIN tblNaplatnaStanica ns ON ks.idStanice = ns.idStanice JOIN tblNaplatnoMesto nm ON nm.idStanice = ns.idStanice JOIN Naplata n ON n.idMesta = nm.idMesta WHERE k.korisnickoIme = '" + k.getUsername() + "'  AND n.datumNaplate BETWEEN '"+ pocetna +"' AND '" + krajnja+ "' GROUP BY nm.idMesta, ns.naziv;";  
+    	String SQL = "SELECT ns.naziv, nm.idMesta, SUM(n.Cena) "+
+    	"FROM tblKorisnici k JOIN KorisnikStanica ks ON k.korisnickoIme = ks.korisnickoIme"+
+    	" JOIN tblNaplatnaStanica ns ON ks.idStanice = ns.idStanice JOIN tblNaplatnoMesto nm "+
+    	"ON nm.idStanice = ns.idStanice JOIN Naplata n ON n.idMesta = nm.idMesta WHERE k.korisnickoIme = '"
+    	+ k.getUsername() + "'  AND n.datumNaplate BETWEEN '"+ pocetna +"' AND '" + krajnja+ "' GROUP BY nm.idMesta, ns.naziv;";  
 
     	System.out.println(SQL);
     	try {
