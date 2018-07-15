@@ -77,16 +77,17 @@ public class Login extends JFrame implements ActionListener {
 	         boolean nadjen = false;
 	         while (rs.next()) { 
 	            if(user.equals(rs.getString(1)) && pass.equals(rs.getString(2))){
-	            	if(rs.getString(3) == "1"){ //admin
-	            		
+	            	Korisnik k = new Korisnik(rs.getString(1), rs.getString(2), TipKorisnika.SEF);
+       
+	            	if(rs.getString(3).equals("1")){ //admin
+	            		AdminView av = new AdminView(k);
+	            		av.setVisible(true);
 	            	}else if(rs.getString(3).equals("2"))//sef stanice
 	            	{
 	    
-	            		Korisnik k = new Korisnik(rs.getString(1), rs.getString(2), TipKorisnika.SEF);
 	            		SefStanice sef = new SefStanice(k);
 	            		sef.setVisible(true);
 	            	}else if(rs.getString(3).equals("3")){ //kontrolor
-	            		Korisnik k = new Korisnik(rs.getString(1), rs.getString(2), TipKorisnika.KONTROLOR);
 	            		DodavanjeNaplate dn = new DodavanjeNaplate(k);
 	            		dn.setVisible(true);
 	            	}
